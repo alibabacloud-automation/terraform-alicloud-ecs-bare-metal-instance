@@ -6,7 +6,6 @@ provider "alicloud" {
   configuration_source    = "terraform-alicloud-modules/ecs-bare-metal-instance"
 }
 locals {
-  bare_metal_type        = var.bare_metal_type != "" || var.bare_metal_type == "cpu" ? var.bare_metal_type : null && var.bare_metal_type != "" || var.bare_metal_type == "gpu" ? var.bare_metal_type : null
   instance_type_families = var.bare_metal_type == "gpu" ? local.gpu_families : local.cpu_families
   cpu_families           = ["ecs.ebmc6", "ecs.ebmg6", "ecs.ebmr6", "ecs.ebmhfc6", "ecs.ebmhfg6", "ecs.ebmhfr6", "ecs.ebmc5s", "ecs.ebmg5s", "ecs.ebmr5s", "ecs.ebmhfg5", "ecs.ebmc4", "ecs.ebmg5", "ecs.scch5", "ecs.sccg5"]
   gpu_families           = ["ecs.ebmgn6v", "ecs.ebmgn6i", "ecs.sccgn6ne", "ecs.ebmgn6e", "ecs.sccgn6"]
@@ -14,7 +13,7 @@ locals {
 }
 
 data "alicloud_instance_types" "this" {
-  instance_type_family = contains(concat(local.cpu_families, local.gpu_families), var.instance_type_family) ? var.instance_type_family : "null"
+  instance_type_family = contains(local.instance_type_families, var.instance_type_family) ? var.instance_type_family : "null"
   instance_charge_type = var.instance_charge_type
   cpu_core_count       = var.cpu_core_count > 0 ? var.cpu_core_count : null
   memory_size          = var.memory_size > 0 ? var.memory_size : null
