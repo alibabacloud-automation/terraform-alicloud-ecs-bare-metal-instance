@@ -1,6 +1,4 @@
-###############
 # ECS Instance
-###############
 output "this_instance_public_ip" {
   description = "The instance public ip."
   value       = module.bare_metal_ecs_instance.this_instance_public_ip
@@ -20,6 +18,7 @@ output "this_instance_id" {
   description = "The instance id"
   value       = module.bare_metal_ecs_instance.this_instance_id
 }
+
 output "this_instance_name" {
   description = "The instance name."
   value       = module.bare_metal_ecs_instance.this_instance_name
