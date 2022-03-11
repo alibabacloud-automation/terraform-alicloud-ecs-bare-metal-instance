@@ -2,7 +2,6 @@ locals {
   instance_type_families = var.bare_metal_type == "gpu" ? local.gpu_families : local.cpu_families
   cpu_families           = ["ecs.ebmc6", "ecs.ebmg6", "ecs.ebmr6", "ecs.ebmhfc6", "ecs.ebmhfg6", "ecs.ebmhfr6", "ecs.ebmc5s", "ecs.ebmg5s", "ecs.ebmr5s", "ecs.ebmhfg5", "ecs.ebmc4", "ecs.ebmg5", "ecs.scch5", "ecs.sccg5"]
   gpu_families           = ["ecs.ebmgn6v", "ecs.ebmgn6i", "ecs.sccgn6ne", "ecs.ebmgn6e", "ecs.sccgn6"]
-
 }
 
 data "alicloud_instance_types" "this" {
@@ -16,18 +15,15 @@ data "alicloud_instance_types" "this" {
 data "alicloud_vswitches" "this" {
   ids = length(var.vswitch_ids) > 0 ? var.vswitch_ids : [var.vswitch_id]
 }
+
 data "alicloud_images" "this" {
   most_recent = var.most_recent
   owners      = var.owners
   name_regex  = var.image_name_regex
 }
+
 module "ecs-instance" {
   source = "alibaba/ecs-instance/alicloud"
-
-  region                  = var.region
-  profile                 = var.profile
-  shared_credentials_file = var.shared_credentials_file
-  skip_region_validation  = var.skip_region_validation
 
   number_of_instances = var.number_of_instances
 
@@ -45,10 +41,9 @@ module "ecs-instance" {
   private_ip         = var.private_ip
   private_ips        = var.private_ips
 
-
   // Specify instance basic attributes
   name              = var.name
-  use_num_suffix    = true
+  use_num_suffix    = var.use_num_suffix
   tags              = var.tags
   resource_group_id = var.resource_group_id
   user_data         = var.user_data
@@ -60,7 +55,6 @@ module "ecs-instance" {
   instance_charge_type        = var.instance_charge_type
   subscription                = var.subscription
   dry_run                     = var.dry_run
-
 
   // Specify instance disk setting
   system_disk_category = var.system_disk_category
@@ -85,4 +79,5 @@ module "ecs-instance" {
   // Set the useless parameters
   credit_specification = null
   spot_strategy        = "NoSpot"
+
 }

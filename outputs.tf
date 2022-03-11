@@ -1,6 +1,4 @@
-###############
 # ECS Instance
-################
 output "this_instance_public_ip" {
   description = "The instance public ip."
   value       = module.ecs-instance.this_public_ip
