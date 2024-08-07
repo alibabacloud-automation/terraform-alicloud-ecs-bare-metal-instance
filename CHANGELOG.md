@@ -1,4 +1,7 @@
-## 1.2.0 (Unreleased)
+## 1.2.0 (August 07, 2024)
+
+- deprecate [GH-5](https://github.com/alibabacloud-automation/terraform-alicloud-ecs-bare-metal-instance/pull/5)
+
 ## 1.1.0 (December 10, 2021)
 
 ENHANCEMENTS:
